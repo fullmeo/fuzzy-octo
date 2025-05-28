@@ -4,16 +4,45 @@
   "description": "🐙 The Smart Octopus AI - Transform fuzzy ideas into precise code",
   "main": "api/index.js",
   "scripts": {
-    "dev": "node api/index.js",
-    "start": "node api/index.js",
-    "test": "jest"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "keywords": ["ai", "coding", "octopus", "fuzzy", "assistant"],
+  "homepage": ".",
+  "keywords": [
+    "ai",
+    "coding",
+    "octopus",
+    "fuzzy",
+    "assistant"
+  ],
   "author": "Serigne Diagne <serignetrumpet@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "@types/react-router-dom": "^5.3.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
     "express": "^4.18.2",
-    "openai": "^4.20.1",
-    "cors": "^2.8.5"
+    "openai": "^4.103.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.1",
+    "react-scripts": "^5.0.1",
+    "typescript": "^4.9.5"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
