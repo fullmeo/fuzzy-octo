@@ -812,6 +812,10 @@ function GamePage() {
   const [generatedApps, setGeneratedApps] = useState<any[]>([]);
   const [showAppGenerator, setShowAppGenerator] = useState(false);
 
+  // 🎮 PROOF OF GAMING System
+  const [gamingProofs, setGamingProofs] = useState<any[]>([]);
+  const [totalProofScore, setTotalProofScore] = useState(0);
+
   // 🔗 NOUVEAU : VS Code Bridge Integration
   const [vscodeBridge, setVSCodeBridge] = useState<any>(null);
   const [extensionStatus, setExtensionStatus] = useState<'disconnected' | 'connecting' | 'connected' | 'healing'>('disconnected');
@@ -902,6 +906,89 @@ function GamePage() {
   // 🔧 CORRECTION 3: Ajouter la fonction manquante getMostFrequentVibe
   // (Ajoutez cette fonction AVANT generateAppFromVibe)
 
+  const generateAppName = (vibe: string): string => {
+    const namesByVibe: Record<string, string[]> = {
+      flow: ['FlowMaster Pro', 'ZenFlow App', 'StreamLine', 'FlowSync'],
+      creative: ['CreativeHub', 'IdeaForge', 'InnovateLab', 'ArtisanStudio'],
+      focus: ['FocusZone', 'DeepWork Pro', 'ConcentrationMaster', 'TaskFlow'],
+      chill: ['ChillVibes', 'RelaxStation', 'CalmWave', 'SerenityApp'],
+      energized: ['PowerBoost', 'EnergyFlow', 'VitalityHub', 'DynamicPro'],
+    };
+
+    const names = namesByVibe[vibe] || namesByVibe.flow;
+    return names[Math.floor(Math.random() * names.length)];
+  };
+
+  const mapVibeToCategory = (vibe: string): string => {
+    const categoryMap: Record<string, string> = {
+      flow: 'Productivity',
+      creative: 'Design & Art',
+      focus: 'Productivity',
+      chill: 'Lifestyle',
+      energized: 'Health & Fitness',
+    };
+    return categoryMap[vibe] || 'Productivity';
+  };
+
+  const generateDescription = (vibe: string, creativity: number): string => {
+    const baseDescriptions: Record<string, string> = {
+      flow: 'A productivity app that helps you stay in the flow state',
+      creative: 'Unleash your creativity with AI-powered design tools',
+      focus: 'Deep focus assistant for maximum concentration',
+      chill: 'Relaxation and mindfulness companion',
+      energized: 'Boost your energy and vitality throughout the day',
+    };
+
+    const description = baseDescriptions[vibe] || baseDescriptions.flow;
+    return `${description}. Creativity level: ${creativity}%`;
+  };
+
+  const generateFeatures = (vibeHistory: string[]): string[] => {
+    const featurePool = [
+      'AI-powered insights',
+      'Real-time collaboration',
+      'Advanced analytics',
+      'Customizable interface',
+      'Cloud synchronization',
+      'Mobile-first design',
+      'Gamification elements',
+      'Integration with popular tools',
+    ];
+
+    const numFeatures = Math.min(3 + vibeHistory.length, 6);
+    return featurePool.slice(0, numFeatures);
+  };
+
+  const suggestTechStack = (vibe: string): string[] => {
+    const techStacks: Record<string, string[]> = {
+      flow: ['React', 'TypeScript', 'Redux', 'Node.js'],
+      creative: ['React', 'Three.js', 'Canvas API', 'WebGL'],
+      focus: ['React', 'TypeScript', 'Electron', 'SQLite'],
+      chill: ['React Native', 'Expo', 'Firebase', 'TensorFlow.js'],
+      energized: ['React Native', 'HealthKit', 'Core Motion', 'Firebase'],
+    };
+    return techStacks[vibe] || techStacks.flow;
+  };
+
+  const generateCodePreview = (vibe: string): string => {
+    const codePreviews: Record<string, string> = {
+      flow: `function FlowTimer() {\n  const [time, setTime] = useState(0);\n  return <Timer value={time} />;\n}`,
+      creative: `function Canvas() {\n  const ctx = useCanvas();\n  return <DrawingBoard context={ctx} />;\n}`,
+      focus: `function FocusMode() {\n  const [focused, setFocused] = useState(false);\n  return <Session active={focused} />;\n}`,
+      chill: `function Meditation() {\n  const [calm, setCalm] = useState(0);\n  return <CalmMeter level={calm} />;\n}`,
+      energized: `function Tracker() {\n  const [energy, setEnergy] = useState(100);\n  return <EnergyBar value={energy} />;\n}`,
+    };
+    return codePreviews[vibe] || codePreviews.flow;
+  };
+
+  const calculateMarketPotential = (creativity: number): number => {
+    return Math.round(creativity * 0.8 + Math.random() * 20);
+  };
+
+  const calculateFuzzyInvestment = (creativity: number): number => {
+    return Math.round(creativity * 10 + Math.random() * 100);
+  };
+
   const getMostFrequentVibe = (vibeHistory: string[]): string => {
     if (vibeHistory.length === 0) {
       return 'flow'; // Vibe par défaut
@@ -977,36 +1064,24 @@ function GamePage() {
   const subscriptionBenefits = {
     free: {
       fuzzyMultiplier: 1,
-      maxAppsPerDay: 1,
-      vibeActions: ['basic'],
-      healingSpeed: 'normal',
-      exclusiveFeatures: []
+      exclusiveVibes: false,
+      vincianWisdom: false,
+      autoGenerateApps: false,
+      priorityHealing: false
     },
     premium: {
       fuzzyMultiplier: 2,
-      maxAppsPerDay: 5,
-      vibeActions: ['basic', 'advanced'],
-      healingSpeed: 'fast',
-      exclusiveFeatures: [
-        '🎨 Vincian Code Analysis',
-        '🔮 AI-Generated Vibes',
-        '⚡ Instant Extension Healing',
-        '🏆 Premium Challenges'
-      ]
+      exclusiveVibes: true,
+      vincianWisdom: true,
+      autoGenerateApps: false,
+      priorityHealing: true
     },
     pro: {
       fuzzyMultiplier: 3,
-      maxAppsPerDay: 'unlimited',
-      vibeActions: ['basic', 'advanced', 'legendary'],
-      healingSpeed: 'instant',
-      exclusiveFeatures: [
-        '🌟 Legendary Vibe Modes',
-        '🤖 AI Pair Programming',
-        '🏗️ Enterprise App Generation',
-        '💎 Custom Pinky Skins',
-        '📊 Advanced Analytics',
-        '🎯 Personalized Learning Path'
-      ]
+      exclusiveVibes: true,
+      vincianWisdom: true,
+      autoGenerateApps: true,
+      priorityHealing: true
     }
   };
 
@@ -1021,8 +1096,9 @@ function GamePage() {
       // Écouter la réponse
       window.addEventListener('message', (event) => {
         if (event.data.command === 'subscription-status') {
-          setAIMasterySubscription(event.data.status);
-          setPremiumBenefits(subscriptionBenefits[event.data.status]);
+          const status = event.data.status as 'free' | 'premium' | 'pro';
+          setAIMasterySubscription(status);
+          setPremiumBenefits(subscriptionBenefits[status]);
         }
       });
     }
@@ -1217,9 +1293,11 @@ function GamePage() {
         }}>
           <h4>🎁 Vos avantages actifs :</h4>
           <ul style={{ textAlign: 'left', margin: 0 }}>
-            {subscriptionBenefits[aiMasterySubscription].exclusiveFeatures.map((feature, index) => (
-              <li key={index}>{feature}</li>
-            ))}
+            <li>🎯 Fuzzy Multiplier: x{premiumBenefits.fuzzyMultiplier}</li>
+            {premiumBenefits.exclusiveVibes && <li>🎨 Exclusive Vibes</li>}
+            {premiumBenefits.vincianWisdom && <li>🔮 Vincian Wisdom</li>}
+            {premiumBenefits.autoGenerateApps && <li>🤖 Auto-Generate Apps</li>}
+            {premiumBenefits.priorityHealing && <li>⚡ Priority Healing</li>}
           </ul>
         </div>
       )}
