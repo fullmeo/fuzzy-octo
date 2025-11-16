@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ff69b4" />
+    <meta name="description" content="🐙💕 Fuzzy-Octo avec Pinky Poulpe - L'assistant IA qui transforme vos idées floues en code précis !" />
+    
+    <title>🐙💕 Fuzzy-Octo - Pinky Poulpe</title>
+    
+    <!-- Favicon Pinky -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐙</text></svg>" />
+    
+    <style>
+      /* Loading screen */
+      #loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-family: Arial, sans-serif;
+        z-index: 9999;
+      }
+      
+      .loading-pinky {
+        font-size: 6rem;
+        animation: loading-float 2s ease-in-out infinite;
+        filter: hue-rotate(300deg) saturate(1.5) brightness(1.1);
+      }
+      
+      @keyframes loading-float {
+        0%, 100% { transform: translateY(0px) rotate(-5deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+      }
+      
+      .loading-text {
+        margin-top: 2rem;
+        font-size: 1.5rem;
+        animation: loading-pulse 1.5s ease-in-out infinite;
+      }
+      
+      @keyframes loading-pulse {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <div style="text-align: center; padding: 2rem; font-family: Arial, sans-serif;">
+        <h1>🐙💕 Fuzzy-Octo nécessite JavaScript</h1>
+        <p>Veuillez activer JavaScript pour voir Pinky Poulpe en action !</p>
+      </div>
+    </noscript>
+    
+    <!-- Loading screen avec Pinky -->
+    <div id="loading">
+      <div class="loading-pinky">🐙💕</div>
+      <div class="loading-text">Pinky Poulpe se réveille...</div>
+      <div style="margin-top: 1rem; font-size: 1rem; opacity: 0.8;">
+        Chargement des 8 tentacules d'intelligence...
+      </div>
+    </div>
+    
+    <!-- Root pour React -->
+    <div id="root"></div>
+    
+    <script>
+      // Cache le loading screen une fois React chargé
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          const loading = document.getElementById('loading');
+          if (loading) {
+            loading.style.opacity = '0';
+            loading.style.transition = 'opacity 0.5s ease-out';
+            setTimeout(() => loading.remove(), 500);
+          }
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>
