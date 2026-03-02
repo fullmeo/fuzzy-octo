@@ -6,6 +6,16 @@ const express = require('express');
 const cors = require('cors');
 const OpenAI = require('openai');
 
+// Sea-Quest & Services
+let seaquestRouter, convergenceEngine, advancedAI;
+try {
+  seaquestRouter = require('./routes/seaquest');
+  ({ convergenceEngine } = require('../services/convergence'));
+  ({ advancedAI } = require('../services/AdvancedAI'));
+} catch (e) {
+  console.warn('[boot] Optional services not loaded:', e.message);
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -18,6 +28,26 @@ const openai = new OpenAI({
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
+
+// Sea-Quest game routes
+if (seaquestRouter) {
+  app.use('/api/seaquest', seaquestRouter);
+}
+
+// Analytics endpoint (Magnus 13.2 stats)
+app.get('/api/analytics/metrics', (req, res) => {
+  try {
+    const data = convergenceEngine ? convergenceEngine.getStatus() : {
+      engine: 'Magnus 13.2 (not loaded)',
+      metrics: { totalProcessed: 0, avgComplexity: 0, avgClarity: 0 },
+      aiStats: advancedAI ? advancedAI.getStats() : {},
+      learningStats: { totalQueries: 0, topPatterns: [] }
+    };
+    res.json({ success: true, data });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // 🐙 Welcome message with brain status
 app.get('/', (req, res) => {
@@ -33,6 +63,24 @@ app.get('/', (req, res) => {
       "/health": "GET - Check if the octopus is awake",
       "/brain": "GET - Check brain status"
     }
+  });
+});
+
+// 🌊 Fuzzy v1 status endpoint
+app.get('/v1/fuzzy/status', (req, res) => {
+  const aiStats = advancedAI ? advancedAI.getStats() : null;
+  res.json({
+    status: 'online',
+    version: '2.0',
+    engine: 'Fuzzy-Octo Smart Octopus',
+    tentacles: 8,
+    providers: {
+      anthropic: aiStats ? aiStats.anthropicAvailable : !!process.env.ANTHROPIC_API_KEY,
+      openai: aiStats ? aiStats.openaiAvailable : !!process.env.OPENAI_API_KEY
+    },
+    primaryProvider: aiStats ? aiStats.primaryProvider : 'unknown',
+    magnus: convergenceEngine ? `v${convergenceEngine.version}` : 'not loaded',
+    timestamp: new Date().toISOString()
   });
 });
 
