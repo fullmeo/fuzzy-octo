@@ -1,0 +1,28 @@
+
+// Routes Fuzzy API
+app.get('/api/fuzzy/strategies', (req, res) => {
+  res.json({
+    strategies: [
+      "🎯 Strategy 1: Focused Analysis",
+      "🔍 Strategy 2: Deep Research", 
+      "🚀 Strategy 3: Innovation Mode",
+      "🎨 Strategy 4: Creative Synthesis",
+      "⚡ Strategy 5: Quick Response",
+      "🧠 Strategy 6: Logic Processing",
+      "💡 Strategy 7: Insight Generation",
+      "🐙 Strategy 8: Full Tentacle Mode"
+    ],
+    status: "ready",
+    tentacles: "🐙 8 strategies loaded"
+  });
+});
+
+app.post('/api/fuzzy/query', (req, res) => {
+  const { query } = req.body;
+  res.json({
+    result: `🐙 Fuzzy analysis for: "${query}"`,
+    strategies_used: ["🎯", "🔍", "🚀"],
+    confidence: 0.85,
+    status: "success"
+  });
+});

@@ -1,0 +1,167 @@
+.fuzzy-header {
+  background: linear-gradient(135deg, #20b2aa, #008b8b);
+  padding: 20px;
+  text-align: center;
+  color: white;
+}
+
+.fuzzy-header nav {
+  margin-top: 15px;
+}
+
+.fuzzy-header nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.fuzzy-header nav a:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.village-container,
+.character-container,
+.shop-container,
+.island-container {
+  min-height: 80vh;
+  padding: 40px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #87ceeb, #98fb98);
+}
+
+.fuzzy-footer {
+  background: #2c3e50;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: auto;
+}
+
+/* DASHBOARD STATS */
+.stats-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.15);
+  padding: 1.5rem;
+  border-radius: 15px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.25);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  background: rgba(255,255,255,0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.stat-card h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #34495e;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* STYLES POUR LE JEU */
+.activities {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.activities button {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #ff69b4, #ff1493);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255,105,180,0.3);
+}
+
+.activities button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255,105,180,0.5);
+  background: linear-gradient(135deg, #ff1493, #dc143c);
+}
+
+.villagers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.villager {
+  background: rgba(255,255,255,0.1);
+  padding: 1.5rem;
+  border-radius: 15px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.villager:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.villager span {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.villager h3 {
+  margin: 0.5rem 0;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+.friendship-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.friendship-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}

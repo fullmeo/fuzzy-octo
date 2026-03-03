@@ -1,0 +1,465 @@
+// api/services/Advanced/AIModelManager.ts
+export interface AIModel {
+  id: string;
+  name: string;
+  type: 'llm' | 'vision' | 'audio' | 'multimodal' | 'specialized';
+  provider: 'openai' | 'anthropic' | 'local' | 'huggingface' | 'custom';
+  capabilities: string[];
+  parameters: {
+    maxTokens: number;
+    temperature: number;
+    topP: number;
+    contextWindow: number;
+  };
+  performance: {
+    latency: number;
+    throughput: number;
+    accuracy: number;
+    cost: number;
+  };
+  status: 'active' | 'loading' | 'error' | 'offline';
+  metadata: any;
+}
+
+export interface ModelRequest {
+  input: string | any[];
+  model?: string;
+  strategy?: 'fastest' | 'best_quality' | 'cost_effective' | 'balanced';
+  fallback?: boolean;
+  context?: any;
+}
+
+export interface ModelResponse {
+  output: any;
+  model: string;
+  confidence: number;
+  processingTime: number;
+  tokensUsed: number;
+  cost: number;
+  metadata: any;
+}
+
+export interface EnsembleStrategy {
+  name: string;
+  models: string[];
+  votingMethod: 'majority' | 'weighted' | 'consensus' | 'best_confidence';
+  weights?: number[];
+  threshold?: number;
+}
+
+export class AIModelManager {
+  private models: Map<string, AIModel> = new Map();
+  private ensembleStrategies: Map<string, EnsembleStrategy> = new Map();
+  private loadBalancer: LoadBalancer;
+  private cache: ModelCache;
+  private monitor: PerformanceMonitor;
+  private fallbackChain: string[] = [];
+
+  constructor() {
+    this.loadBalancer = new LoadBalancer();
+    this.cache = new ModelCache();
+    this.monitor = new PerformanceMonitor();
+    this.initializeModels();
+    this.setupEnsembleStrategies();
+  }
+
+  private initializeModels(): void {
+    // OpenAI Models
+    this.registerModel({
+      id: 'gpt-4',
+      name: 'GPT-4',
+      type: 'llm',
+      provider: 'openai',
+      capabilities: ['text_generation', 'reasoning', 'code', 'analysis'],
+      parameters: {
+        maxTokens: 8192,
+        temperature: 0.7,
+        topP: 1.0,
+        contextWindow: 32768
+      },
+      performance: {
+        latency: 2000,
+        throughput: 50,
+        accuracy: 0.95,
+        cost: 0.03
+      },
+      status: 'active',
+      metadata: { apiKey: process.env.OPENAI_API_KEY }
+    });
+
+    // Anthropic Models
+    this.registerModel({
+      id: 'claude-3',
+      name: 'Claude 3',
+      type: 'llm',
+      provider: 'anthropic',
+      capabilities: ['text_generation', 'reasoning', 'safety', 'analysis'],
+      parameters: {
+        maxTokens: 4096,
+        temperature: 0.7,
+        topP: 1.0,
+        contextWindow: 200000
+      },
+      performance: {
+        latency: 1500,
+        throughput: 60,
+        accuracy: 0.93,
+        cost: 0.025
+      },
+      status: 'active',
+      metadata: { apiKey: process.env.ANTHROPIC_API_KEY }
+    });
+
+    // Local Models
+    this.registerModel({
+      id: 'llama-2-7b',
+      name: 'Llama 2 7B',
+      type: 'llm',
+      provider: 'local',
+      capabilities: ['text_generation', 'fast_inference'],
+      parameters: {
+        maxTokens: 2048,
+        temperature: 0.8,
+        topP: 0.9,
+        contextWindow: 4096
+      },
+      performance: {
+        latency: 500,
+        throughput: 100,
+        accuracy: 0.85,
+        cost: 0.001
+      },
+      status: 'active',
+      metadata: { modelPath: './models/llama-2-7b' }
+    });
+
+    // Specialized Models
+    this.registerModel({
+      id: 'code-assistant',
+      name: 'Code Assistant',
+      type: 'specialized',
+      provider: 'custom',
+      capabilities: ['code_generation', 'debugging', 'optimization'],
+      parameters: {
+        maxTokens: 4096,
+        temperature: 0.3,
+        topP: 0.8,
+        contextWindow: 8192
+      },
+      performance: {
+        latency: 800,
+        throughput: 80,
+        accuracy: 0.92,
+        cost: 0.01
+      },
+      status: 'active',
+      metadata: { specialized: 'programming' }
+    });
+
+    // Vision Model
+    this.registerModel({
+      id: 'vision-analyzer',
+      name: 'Vision Analyzer',
+      type: 'vision',
+      provider: 'custom',
+      capabilities: ['image_analysis', 'ocr', 'object_detection'],
+      parameters: {
+        maxTokens: 1024,
+        temperature: 0.5,
+        topP: 0.9,
+        contextWindow: 2048
+      },
+      performance: {
+        latency: 1200,
+        throughput: 40,
+        accuracy: 0.88,
+        cost: 0.02
+      },
+      status: 'active',
+      metadata: { inputTypes: ['image/jpeg', 'image/png'] }
+    });
+
+    this.fallbackChain = ['gpt-4', 'claude-3', 'llama-2-7b', 'code-assistant'];
+  }
+
+  private setupEnsembleStrategies(): void {
+    // Stratégie consensus pour haute précision
+    this.ensembleStrategies.set('high_accuracy', {
+      name: 'High Accuracy Ensemble',
+      models: ['gpt-4', 'claude-3'],
+      votingMethod: 'consensus',
+      threshold: 0.8
+    });
+
+    // Stratégie équilibrée
+    this.ensembleStrategies.set('balanced', {
+      name: 'Balanced Ensemble',
+      models: ['gpt-4', 'llama-2-7b', 'code-assistant'],
+      votingMethod: 'weighted',
+      weights: [0.5, 0.3, 0.2]
+    });
+
+    // Stratégie rapide
+    this.ensembleStrategies.set('fast_response', {
+      name: 'Fast Response Ensemble',
+      models: ['llama-2-7b', 'code-assistant'],
+      votingMethod: 'best_confidence'
+    });
+  }
+
+  public registerModel(model: AIModel): void {
+    this.models.set(model.id, model);
+    this.loadBalancer.addModel(model);
+    this.monitor.trackModel(model.id);
+  }
+
+  public async query(request: ModelRequest): Promise<ModelResponse> {
+    const startTime = Date.now();
+    
+    // Vérifier le cache
+    const cacheKey = this.cache.generateKey(request);
+    const cachedResult = await this.cache.get(cacheKey);
+    if (cachedResult) {
+      return cachedResult;
+    }
+
+    // Sélectionner le modèle optimal
+    const selectedModel = await this.selectModel(request);
+    
+    try {
+      // Exécuter la requête
+      const response = await this.executeModelRequest(selectedModel, request);
+      
+      // Mettre en cache
+      await this.cache.set(cacheKey, response);
+      
+      // Surveiller les performances
+      this.monitor.recordRequest(selectedModel.id, Date.now() - startTime, true);
+      
+      return response;
+      
+    } catch (error) {
+      console.error(`Model ${selectedModel.id} failed:`, error);
+      
+      // Tentative de fallback
+      if (request.fallback !== false) {
+        return this.tryFallback(request, selectedModel.id);
+      }
+      
+      throw error;
+    }
+  }
+
+  private async selectModel(request: ModelRequest): Promise<AIModel> {
+    if (request.model) {
+      const specificModel = this.models.get(request.model);
+      if (specificModel && specificModel.status === 'active') {
+        return specificModel;
+      }
+    }
+
+    const strategy = request.strategy || 'balanced';
+    const availableModels = Array.from(this.models.values())
+      .filter(model => model.status === 'active');
+
+    switch (strategy) {
+      case 'fastest':
+        return availableModels.reduce((fastest, current) =>
+          current.performance.latency < fastest.performance.latency ? current : fastest
+        );
+
+      case 'best_quality':
+        return availableModels.reduce((best, current) =>
+          current.performance.accuracy > best.performance.accuracy ? current : best
+        );
+
+      case 'cost_effective':
+        return availableModels.reduce((cheapest, current) =>
+          current.performance.cost < cheapest.performance.cost ? current : cheapest
+        );
+
+      case 'balanced':
+      default:
+        return this.loadBalancer.selectModel(availableModels, request);
+    }
+  }
+
+  private async executeModelRequest(model: AIModel, request: ModelRequest): Promise<ModelResponse> {
+    const startTime = Date.now();
+
+    switch (model.provider) {
+      case 'openai':
+        return this.callOpenAI(model, request);
+      
+      case 'anthropic':
+        return this.callAnthropic(model, request);
+      
+      case 'local':
+        return this.callLocalModel(model, request);
+      
+      case 'custom':
+        return this.callCustomModel(model, request);
+      
+      default:
+        throw new Error(`Unsupported provider: ${model.provider}`);
+    }
+  }
+
+  private async callOpenAI(model: AIModel, request: ModelRequest): Promise<ModelResponse> {
+    // Simulation d'appel OpenAI
+    const response = {
+      output: `OpenAI ${model.name} response to: ${request.input}`,
+      model: model.id,
+      confidence: 0.9 + Math.random() * 0.1,
+      processingTime: model.performance.latency + Math.random() * 200,
+      tokensUsed: Math.floor(Math.random() * 500) + 100,
+      cost: model.performance.cost * Math.floor(Math.random() * 500) + 100,
+      metadata: { provider: 'openai', version: 'gpt-4-0125-preview' }
+    };
+
+    return response;
+  }
+
+  private async callAnthropic(model: AIModel, request: ModelRequest): Promise<ModelResponse> {
+    // Simulation d'appel Anthropic
+    return {
+      output: `Anthropic ${model.name} analysis: ${request.input}`,
+      model: model.id,
+      confidence: 0.88 + Math.random() * 0.12,
+      processingTime: model.performance.latency + Math.random() * 150,
+      tokensUsed: Math.floor(Math.random() * 400) + 80,
+      cost: model.performance.cost * Math.floor(Math.random() * 400) + 80,
+      metadata: { provider: 'anthropic', safety_filtered: true }
+    };
+  }
+
+  private async callLocalModel(model: AIModel, request: ModelRequest): Promise<ModelResponse> {
+    // Simulation d'appel modèle local
+    return {
+      output: `Local ${model.name} inference: ${request.input}`,
+      model: model.id,
+      confidence: 0.75 + Math.random() * 0.2,
+      processingTime: model.performance.latency + Math.random() * 100,
+      tokensUsed: Math.floor(Math.random() * 300) + 50,
+      cost: model.performance.cost * Math.floor(Math.random() * 300) + 50,
+      metadata: { provider: 'local', gpu_utilization: 0.8 }
+    };
+  }
+
+  private async callCustomModel(model: AIModel, request: ModelRequest): Promise<ModelResponse> {
+    // Simulation d'appel modèle personnalisé
+    if (model.type === 'specialized') {
+      return {
+        output: `Specialized ${model.name} result: ${request.input}`,
+        model: model.id,
+        confidence: 0.85 + Math.random() * 0.15,
+        processingTime: model.performance.latency + Math.random() * 120,
+        tokensUsed: Math.floor(Math.random() * 200) + 30,
+        cost: model.performance.cost * Math.floor(Math.random() * 200) + 30,
+        metadata: { provider: 'custom', specialized: true }
+      };
+    }
+
+    throw new Error(`Unsupported custom model type: ${model.type}`);
+  }
+
+  private async tryFallback(request: ModelRequest, failedModelId: string): Promise<ModelResponse> {
+    const fallbackModels = this.fallbackChain.filter(id => 
+      id !== failedModelId && this.models.get(id)?.status === 'active'
+    );
+
+    for (const modelId of fallbackModels) {
+      try {
+        const fallbackModel = this.models.get(modelId)!;
+        const response = await this.executeModelRequest(fallbackModel, request);
+        response.metadata.fallback = true;
+        response.metadata.originalModel = failedModelId;
+        return response;
+      } catch (error) {
+        console.error(`Fallback model ${modelId} also failed:`, error);
+        continue;
+      }
+    }
+
+    throw new Error('All models failed, including fallbacks');
+  }
+
+  public async queryEnsemble(request: ModelRequest, strategyName: string): Promise<ModelResponse> {
+    const strategy = this.ensembleStrategies.get(strategyName);
+    if (!strategy) {
+      throw new Error(`Ensemble strategy ${strategyName} not found`);
+    }
+
+    const responses = await Promise.allSettled(
+      strategy.models.map(modelId => 
+        this.query({ ...request, model: modelId, fallback: false })
+      )
+    );
+
+    const successfulResponses = responses
+      .filter((result): result is PromiseFulfilledResult<ModelResponse> => 
+        result.status === 'fulfilled'
+      )
+      .map(result => result.value);
+
+    if (successfulResponses.length === 0) {
+      throw new Error('All models in ensemble failed');
+    }
+
+    return this.combineEnsembleResponses(successfulResponses, strategy);
+  }
+
+  private combineEnsembleResponses(responses: ModelResponse[], strategy: EnsembleStrategy): ModelResponse {
+    switch (strategy.votingMethod) {
+      case 'majority':
+        return this.majorityVote(responses);
+      
+      case 'weighted':
+        return this.weightedVote(responses, strategy.weights || []);
+      
+      case 'consensus':
+        return this.consensusVote(responses, strategy.threshold || 0.8);
+      
+      case 'best_confidence':
+        return responses.reduce((best, current) =>
+          current.confidence > best.confidence ? current : best
+        );
+      
+      default:
+        return responses[0];
+    }
+  }
+
+  private majorityVote(responses: ModelResponse[]): ModelResponse {
+    // Logique de vote majoritaire simplifiée
+    return responses.reduce((best, current) => 
+      current.confidence > best.confidence ? current : best
+    );
+  }
+
+  private weightedVote(responses: ModelResponse[], weights: number[]): ModelResponse {
+    const weightedScores = responses.map((response, index) => ({
+      response,
+      score: response.confidence * (weights[index] || 1)
+    }));
+
+    const best = weightedScores.reduce((best, current) =>
+      current.score > best.score ? current : best
+    );
+
+    return best.response;
+  }
+
+  private consensusVote(responses: ModelResponse[], threshold: number): ModelResponse {
+    const avgConfidence = responses.reduce((sum, r) => sum + r.confidence, 0) / responses.length;
+    
+    if (avgConfidence >= threshold) {
+      return responses.reduce((best, current) =>
+        current.confidence > best.confidence ? current : best
+      );
+    }
+
+    throw new Error(`Consensus threshold ${threshold} not met (avg: ${avgConfidence})`);
+  }
+
+  public getModelStats(modelId?: string):

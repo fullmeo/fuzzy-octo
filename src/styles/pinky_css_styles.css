@@ -1,0 +1,473 @@
+/* 🐙💕 Pinky Octopus Styles - Fuzzy Sea Quest */
+
+/* Styles globaux pour l'environnement aquatique */
+.fuzzy-ocean-container {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at center, #004d7a 0%, #008e97 30%, #00bf9a 100%);
+  min-height: 100vh;
+}
+
+/* Effets de lumière sous-marine */
+.underwater-light {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(173,216,230,0.1) 0%, transparent 50%);
+  animation: underwater-shimmer 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes underwater-shimmer {
+  0%, 100% { 
+    opacity: 0.3; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 0.6; 
+    transform: scale(1.1); 
+  }
+}
+
+/* Styles pour Pinky Octopus */
+.pinky-octopus {
+  position: relative;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.pinky-body {
+  font-size: 6rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 
+    0 0 20px rgba(255,105,180,0.5),
+    0 0 40px rgba(255,105,180,0.3),
+    0 0 60px rgba(255,105,180,0.1);
+  filter: drop-shadow(0 10px 20px rgba(255,105,180,0.3));
+}
+
+.pinky-body:hover {
+  transform: scale(1.1);
+  text-shadow: 
+    0 0 30px rgba(255,105,180,0.8),
+    0 0 60px rgba(255,105,180,0.5),
+    0 0 90px rgba(255,105,180,0.3);
+}
+
+/* Tentacules interactives */
+.pinky-tentacle {
+  position: absolute;
+  font-size: 3rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 15px rgba(255,105,180,0.4);
+  z-index: 1;
+}
+
+.pinky-tentacle:hover {
+  transform: scale(1.3);
+  text-shadow: 
+    0 0 25px rgba(255,105,180,0.8),
+    0 0 50px rgba(255,105,180,0.5);
+  filter: brightness(1.5);
+}
+
+/* États de Pinky */
+.pinky-idle {
+  animation: gentle-bob 3s ease-in-out infinite;
+}
+
+.pinky-thinking {
+  animation: thinking-pulse 1.5s ease-in-out infinite;
+  filter: hue-rotate(60deg);
+}
+
+.pinky-success {
+  animation: success-celebration 2s ease-out;
+  filter: hue-rotate(120deg);
+}
+
+.pinky-excited {
+  animation: excited-dance 1s ease-in-out infinite;
+  filter: hue-rotate(320deg);
+}
+
+.pinky-error {
+  animation: error-wiggle 0.5s ease-in-out infinite;
+  filter: hue-rotate(0deg) brightness(1.2);
+}
+
+/* Animations pour les différents états */
+@keyframes gentle-bob {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  50% { 
+    transform: translateY(-15px) rotate(3deg); 
+  }
+}
+
+@keyframes thinking-pulse {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 0.8;
+  }
+  50% { 
+    transform: scale(1.05); 
+    opacity: 1;
+  }
+}
+
+@keyframes success-celebration {
+  0% { 
+    transform: scale(1) rotate(0deg); 
+  }
+  25% { 
+    transform: scale(1.3) rotate(90deg); 
+  }
+  50% { 
+    transform: scale(1.1) rotate(180deg); 
+  }
+  75% { 
+    transform: scale(1.2) rotate(270deg); 
+  }
+  100% { 
+    transform: scale(1) rotate(360deg); 
+  }
+}
+
+@keyframes excited-dance {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg); 
+  }
+  25% { 
+    transform: scale(1.1) rotate(-10deg); 
+  }
+  75% { 
+    transform: scale(1.1) rotate(10deg); 
+  }
+}
+
+@keyframes error-wiggle {
+  0%, 100% { 
+    transform: translateX(0); 
+  }
+  25% { 
+    transform: translateX(-10px); 
+  }
+  75% { 
+    transform: translateX(10px); 
+  }
+}
+
+/* Bulles de tokens */
+.fuzzy-token-bubble {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #333;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 
+    0 8px 25px rgba(255,215,0,0.4),
+    inset 0 2px 5px rgba(255,255,255,0.3);
+  border: 2px solid #ffd700;
+  animation: token-glow 2s ease-in-out infinite;
+  z-index: 20;
+}
+
+@keyframes token-glow {
+  0%, 100% { 
+    box-shadow: 
+      0 8px 25px rgba(255,215,0,0.4),
+      inset 0 2px 5px rgba(255,255,255,0.3);
+    transform: translateX(-50%) translateY(0);
+  }
+  50% { 
+    box-shadow: 
+      0 12px 35px rgba(255,215,0,0.6),
+      inset 0 2px 8px rgba(255,255,255,0.5);
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+/* Messages d'état */
+.pinky-status-message {
+  position: absolute;
+  bottom: -70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(15px);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  animation: message-fade-in 0.5s ease-out;
+  z-index: 15;
+}
+
+@keyframes message-fade-in {
+  0% { 
+    opacity: 0; 
+    transform: translateX(-50%) translateY(10px); 
+  }
+  100% { 
+    opacity: 0.9; 
+    transform: translateX(-50%) translateY(0); 
+  }
+}
+
+/* Icônes d'émotion */
+.pinky-emotion-icon {
+  position: absolute;
+  font-size: 2rem;
+  animation: emotion-bounce 1.5s ease-in-out infinite;
+  z-index: 15;
+}
+
+.emotion-thinking {
+  top: -60px;
+  right: -20px;
+}
+
+.emotion-success {
+  top: -50px;
+  left: -30px;
+}
+
+.emotion-excited {
+  top: -40px;
+  right: -25px;
+  animation: heart-pulse 1s ease-in-out infinite;
+}
+
+.emotion-error {
+  top: -45px;
+  left: -35px;
+  animation: warning-blink 0.8s ease-in-out infinite;
+}
+
+@keyframes emotion-bounce {
+  0%, 100% { 
+    transform: scale(1) translateY(0); 
+  }
+  50% { 
+    transform: scale(1.2) translateY(-5px); 
+  }
+}
+
+@keyframes heart-pulse {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 0.8;
+  }
+  50% { 
+    transform: scale(1.3); 
+    opacity: 1;
+  }
+}
+
+@keyframes warning-blink {
+  0%, 100% { 
+    opacity: 1; 
+  }
+  50% { 
+    opacity: 0.3; 
+  }
+}
+
+/* Effets de particules autour de Pinky */
+.pinky-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, rgba(255,105,180,0.8) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: particle-float 3s ease-in-out infinite;
+}
+
+@keyframes particle-float {
+  0% { 
+    opacity: 0; 
+    transform: translateY(20px) scale(0.5); 
+  }
+  50% { 
+    opacity: 1; 
+    transform: translateY(-20px) scale(1); 
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-40px) scale(0.5); 
+  }
+}
+
+/* Navigation aquatique */
+.ocean-nav {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+  display: flex;
+  gap: 1rem;
+}
+
+.ocean-nav a {
+  color: white;
+  text-decoration: none;
+  background: rgba(0,150,200,0.3);
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 8px 25px rgba(0,150,200,0.3);
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.ocean-nav a:hover {
+  background: rgba(0,150,200,0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(0,150,200,0.4);
+}
+
+/* Vagues de fond animées */
+.ocean-waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(0deg, rgba(0,150,200,0.3) 0%, transparent 100%);
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100px;
+  background: repeating-linear-gradient(
+    90deg, 
+    transparent, 
+    rgba(255,255,255,0.1) 50px, 
+    transparent 100px
+  );
+  animation: wave-flow 20s linear infinite;
+}
+
+.wave:nth-child(2) {
+  bottom: 20px;
+  height: 60px;
+  background: repeating-linear-gradient(
+    90deg, 
+    transparent, 
+    rgba(173,216,230,0.2) 30px, 
+    transparent 60px
+  );
+  animation: wave-flow 15s linear infinite reverse;
+}
+
+@keyframes wave-flow {
+  0% { 
+    transform: translateX(0); 
+  }
+  100% { 
+    transform: translateX(-50%); 
+  }
+}
+
+/* Responsivité */
+@media (max-width: 768px) {
+  .pinky-body {
+    font-size: 4rem;
+  }
+  
+  .pinky-tentacle {
+    font-size: 2rem;
+  }
+  
+  .ocean-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .ocean-nav a {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .fuzzy-token-bubble {
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+  }
+}
+
+/* Effets premium */
+.premium-glow {
+  box-shadow: 
+    0 0 30px rgba(255,215,0,0.6),
+    0 0 60px rgba(255,215,0,0.4),
+    0 0 90px rgba(255,215,0,0.2);
+  animation: premium-pulse 2s ease-in-out infinite;
+}
+
+@keyframes premium-pulse {
+  0%, 100% { 
+    filter: brightness(1); 
+  }
+  50% { 
+    filter: brightness(1.3); 
+  }
+}
+
+/* Mode sombre pour les profondeurs */
+.deep-ocean-mode {
+  background: radial-gradient(ellipse at center, #1a1a2e 0%, #16213e 30%, #0f3460 100%);
+}
+
+.deep-ocean-mode .pinky-body {
+  text-shadow: 
+    0 0 30px rgba(0,255,255,0.8),
+    0 0 60px rgba(0,255,255,0.5);
+}
+
+/* Animations spéciales pour le mode jeu */
+.game-mode .pinky-octopus {
+  animation: game-ready 3s ease-in-out infinite;
+}
+
+@keyframes game-ready {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg); 
+  }
+  33% { 
+    transform: scale(1.05) rotate(5deg); 
+  }
+  66% { 
+    transform: scale(1.05) rotate(-5deg); 
+  }
+}

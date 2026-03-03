@@ -1,0 +1,218 @@
+const express = require('express');
+const cors = require('cors');
+
+const app = express();
+const PORT = 8000;
+
+app.use(cors());
+app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
+
+// ===============================
+// ROUTES FUZZY-OCTO ORIGINALES
+// ===============================
+
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    services: {
+      database: '✅ Configured',
+      redis: '✅ Configured',
+      openai: '❌ Missing'
+    },
+    tentacles: '🐙 8 strategies ready'
+  });
+});
+
+app.get('/api/fuzzy/strategies', (req, res) => {
+  console.log('🎯 STRATEGIES ENDPOINT HIT!');
+  res.json({
+    strategies: [
+      "🎯 Strategy 1: Focused Analysis",
+      "🔍 Strategy 2: Deep Research",
+      "🚀 Strategy 3: Innovation Mode",
+      "🎨 Strategy 4: Creative Synthesis",
+      "⚡ Strategy 5: Quick Response",
+      "🧠 Strategy 6: Logic Processing",
+      "💡 Strategy 7: Insight Generation",
+      "🐙 Strategy 8: Full Tentacle Mode"
+    ],
+    status: "ready",
+    tentacles: "🐙 8 strategies loaded"
+  });
+});
+
+app.post('/api/fuzzy/query', (req, res) => {
+  const { query } = req.body;
+  console.log('🔍 Query received:', query);
+  res.json({
+    result: `🐙 Fuzzy analysis for: "${query}"`,
+    strategies_used: ["🎯", "🔍", "🚀"],
+    confidence: 0.85,
+    status: "success"
+  });
+});
+
+// ===============================
+// ROUTES PRODUCTIVITÉ IA
+// ===============================
+
+app.get('/api/productivity/tasks', (req, res) => {
+  console.log('📋 Tasks endpoint called');
+  
+  const tasks = [
+    {
+      id: '1',
+      title: 'Finaliser le dashboard analytics',
+      priority: 'high',
+      category: 'Development',
+      estimatedTime: 120,
+      deadline: '2025-05-31',
+      completed: false,
+      aiSuggested: false
+    },
+    {
+      id: '2',
+      title: 'Optimiser les requêtes API',
+      priority: 'medium',
+      category: 'Performance',
+      estimatedTime: 90,
+      completed: false,
+      aiSuggested: true
+    },
+    {
+      id: '3',
+      title: 'Documentation Sea-Quest',
+      priority: 'low',
+      category: 'Documentation',
+      estimatedTime: 60,
+      completed: false,
+      aiSuggested: false
+    },
+    {
+      id: '4',
+      title: 'Créer tests automatisés',
+      priority: 'medium',
+      category: 'Testing',
+      estimatedTime: 75,
+      completed: false,
+      aiSuggested: true
+    }
+  ];
+
+  res.json({
+    success: true,
+    tasks,
+    count: tasks.length
+  });
+});
+
+// ===============================
+// ROUTES AUTOMATISATION
+// ===============================
+
+const workflows = [
+  {
+    id: 'wf_1',
+    name: 'Daily Health Check',
+    description: 'Vérification quotidienne de la santé du système',
+    active: true,
+    triggers: [{ type: 'schedule', config: { cron: '0 9 * * *' } }],
+    actions: [{ type: 'analyze' }, { type: 'notify' }],
+    lastExecuted: new Date(Date.now() - 3600000).toISOString(),
+    executionCount: 47
+  },
+  {
+    id: 'wf_2',
+    name: 'Auto Backup',
+    description: 'Sauvegarde automatique des données importantes',
+    active: true,
+    triggers: [{ type: 'schedule', config: { cron: '0 2 * * *' } }],
+    actions: [{ type: 'backup' }, { type: 'cleanup' }],
+    lastExecuted: new Date(Date.now() - 7200000).toISOString(),
+    executionCount: 23
+  },
+  {
+    id: 'wf_3',
+    name: 'Performance Monitor',
+    description: 'Surveillance des performances en temps réel',
+    active: false,
+    triggers: [{ type: 'performance', config: { metric: 'responseTime' } }],
+    actions: [{ type: 'notify' }],
+    lastExecuted: new Date(Date.now() - 86400000).toISOString(),
+    executionCount: 8
+  }
+];
+
+app.get('/api/automation/workflows', (req, res) => {
+  console.log('🤖 Workflows endpoint called');
+  
+  res.json({
+    success: true,
+    workflows,
+    count: workflows.length
+  });
+});
+
+app.get('/api/automation/stats', (req, res) => {
+  console.log('📊 Automation stats endpoint called');
+  
+  const stats = {
+    totalWorkflows: workflows.length,
+    activeWorkflows: workflows.filter(w => w.active).length,
+    totalExecutions: 127,
+    recentExecutions: 8,
+    successRate: 94.2,
+    engineRunning: true
+  };
+  
+  res.json({
+    success: true,
+    stats
+  });
+});
+
+app.post('/api/automation/workflows/:id/execute', (req, res) => {
+  const { id } = req.params;
+  const workflow = workflows.find(w => w.id === id);
+  
+  if (!workflow) {
+    return res.status(404).json({ error: 'Workflow not found' });
+  }
+  
+  workflow.lastExecuted = new Date().toISOString();
+  workflow.executionCount++;
+  
+  res.json({
+    success: true,
+    message: `Workflow ${workflow.name} executed successfully`,
+    execution: {
+      workflowId: id,
+      timestamp: new Date().toISOString(),
+      status: 'success'
+    }
+  });
+});
+
+// ===============================
+// DÉMARRAGE SERVEUR
+// ===============================
+
+console.log('🚀 STARTING FUZZY-OCTO COMPLETE SYSTEM...');
+app.listen(PORT, () => {
+  console.log('✅ API READY!');
+  console.log('🐙 ===============================================');
+  console.log('   FUZZY-OCTO COMPLETE SYSTEM STARTED');
+  console.log('🐙 ===============================================');
+  console.log(`   🌐 Server: http://localhost:${PORT}`);
+  console.log(`   📚 Health: http://localhost:${PORT}/health`);
+  console.log(`   🎯 Strategies: http://localhost:${PORT}/api/fuzzy/strategies`);
+  console.log(`   🤖 Productivity: http://localhost:${PORT}/api/productivity/tasks`);
+  console.log(`   ⚡ Automation: http://localhost:${PORT}/api/automation/workflows`);
+  console.log('   ===============================================');
+});

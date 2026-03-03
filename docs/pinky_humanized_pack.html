@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐙💕 Pinky Pack Visuel Tendance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0D1117, #161B22, #21262D);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .pack-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 105, 180, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 105, 180, 0.4);
+            box-shadow: 0 20px 40px rgba(255, 105, 180, 0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #FF69B4, #FFD700, #FF69B4);
+            animation: shimmer 2s infinite;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #FF69B4, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        /* AVATAR 1: CEO Moderne */
+        .ceo-pinky {
+            position: relative;
+            width: 280px;
+            height: 350px;
+            margin: 0 auto;
+        }
+
+        .ceo-body {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 180px;
+            background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+            border-radius: 50% 50% 30% 30%;
+            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.3);
+        }
+
+        .ceo-head {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 120px;
+            background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+            border-radius: 50% 50% 40% 40%;
+            z-index: 10;
+        }
+
+        .business-suit {
+            position: absolute;
+            top: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130px;
+            height: 160px;
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            border-radius: 15px 15px 0 0;
+            z-index: 5;
+        }
+
+        .suit-collar {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 30px solid white;
+        }
+
+        .tie {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 80px;
+            background: linear-gradient(135deg, #FF69B4, #FF1493);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        .ceo-glasses {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 25px;
+            border: 3px solid #FFD700;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 15;
+        }
+
+        .ceo-glasses::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2px;
+            height: 10px;
+            background: #FFD700;
+        }
+
+        .briefcase {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 30px;
+            background: #8B4513;
+            border-radius: 5px;
+            border: 2px solid #A0522D;
+        }
+
+        .briefcase::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 8px;
+            background: #8B4513;
+            border-radius: 5px 5px 0 0;
+        }
+
+        /* AVATAR 2: Développeuse Hipster */
+        .dev-pinky {
+            position: relative;
+            width: 280px;
+            height: 350px;
+            margin: 0 auto;
+        }
+
+        .dev-body {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 180px;
+            background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+            border-radius: 50% 50% 30% 30%;
+        }
+
+        .hoodie {
+            position: absolute;
+            top: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 180px;
+            background: linear-gradient(135deg, #6B46C1, #9333EA);
+            border-radius: 20px 20px 0 0;
+            z-index: 5;
+        }
+
+        .hoodie-pocket {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 0 0 15px 15px;
+        }
+
+        .code-symbols {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #00FF41;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .laptop {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 40px;
+            background: #333;
+            border-radius: 5px;
+            border: 2px solid #666;
+        }
+
+        .laptop::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 0;
+            width: 60px;
+            height: 30px;
+            background: #222;
+            border-radius: 5px 5px 0 0;
+            border: 2px solid #666;
+        }
+
+        .screen-glow {
+            position: absolute;
+            top: -25px;
+            left: 5px;
+            width: 50px;
+            height: 20px;
+            background: linear-gradient(135deg, #00FF41, #FF69B4);
+            border-radius: 2px;
+            opacity: 0.8;
+            animation: code-glow 2s infinite ease-in-out;
+        }
+
+        /* AVATAR 3: Influenceuse TikTok */
+        .influencer-pinky {
+            position: relative;
+            width: 280px;
+            height: 350px;
+            margin: 0 auto;
+        }
+
+        .trendy-outfit {
+            position: absolute;
+            top: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130px;
+            height: 170px;
+            background: linear-gradient(135deg, #FF6B9D, #C44569);
+            border-radius: 25px 25px 5px 5px;
+            z-index: 5;
+        }
+
+        .crop-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(135deg, #FF9A9E, #FECFEF);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .phone {
+            position: absolute;
+            top: 60px;
+            right: -20px;
+            width: 25px;
+            height: 45px;
+            background: #000;
+            border-radius: 8px;
+            border: 2px solid #333;
+            z-index: 15;
+        }
+
+        .phone-screen {
+            position: absolute;
+            top: 3px;
+            left: 2px;
+            width: 19px;
+            height: 37px;
+            background: linear-gradient(135deg, #FF69B4, #FFD700);
+            border-radius: 4px;
+            animation: tiktok-colors 1.5s infinite;
+        }
+
+        .ring-light {
+            position: absolute;
+            top: 40px;
+            left: -40px;
+            width: 50px;
+            height: 50px;
+            border: 4px solid #FFD700;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+            animation: ring-glow 2s infinite ease-in-out;
+        }
+
+        .followers-count {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 105, 180, 0.9);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* AVATAR 4: Investisseuse Venture Capital */
+        .vc-pinky {
+            position: relative;
+            width: 280px;
+            height: 350px;
+            margin: 0 auto;
+        }
+
+        .power-suit {
+            position: absolute;
+            top: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 135px;
+            height: 170px;
+            background: linear-gradient(135deg, #2D3748, #4A5568);
+            border-radius: 20px 20px 0 0;
+            z-index: 5;
+        }
+
+        .blazer-buttons {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .button {
+            width: 8px;
+            height: 8px;
+            background: #FFD700;
+            border-radius: 50%;
+        }
+
+        .luxury-watch {
+            position: absolute;
+            top: 120px;
+            left: -15px;
+            width: 20px;
+            height: 20px;
+            background: #FFD700;
+            border-radius: 50%;
+            border: 3px solid #FFA500;
+            z-index: 10;
+        }
+
+        .money-stack {
+            position: absolute;
+            bottom: 20px;
+            right: 10px;
+            width: 30px;
+            height: 20px;
+            background: #228B22;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .money-stack::before {
+            content: '$';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .equity-chart {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            width: 40px;
+            height: 25px;
+            background: rgba(255, 105, 180, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            background: #FF69B4;
+            width: 6px;
+            animation: chart-grow 2s infinite ease-in-out;
+        }
+
+        .chart-bar:nth-child(1) { left: 2px; height: 60%; animation-delay: 0s; }
+        .chart-bar:nth-child(2) { left: 10px; height: 80%; animation-delay: 0.2s; }
+        .chart-bar:nth-child(3) { left: 18px; height: 40%; animation-delay: 0.4s; }
+        .chart-bar:nth-child(4) { left: 26px; height: 90%; animation-delay: 0.6s; }
+        .chart-bar:nth-child(5) { left: 34px; height: 70%; animation-delay: 0.8s; }
+
+        /* AVATAR 5: Community Manager */
+        .community-pinky {
+            position: relative;
+            width: 280px;
+            height: 350px;
+            margin: 0 auto;
+        }
+
+        .casual-outfit {
+            position: absolute;
+            top: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 125px;
+            height: 170px;
+            background: linear-gradient(135deg, #667EEA, #764BA2);
+            border-radius: 15px 15px 0 0;
+            z-index: 5;
+        }
+
+        .social-icons {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .social-icon {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            animation: social-pulse 2s infinite ease-in-out;
+        }
+
+        .instagram { background: linear-gradient(135deg, #E4405F, #FCAF45); animation-delay: 0s; }
+        .twitter { background: #1DA1F2; animation-delay: 0.3s; }
+        .tiktok { background: linear-gradient(135deg, #FF0050, #00F2EA); animation-delay: 0.6s; }
+        .discord { background: #5865F2; animation-delay: 0.9s; }
+
+        .engagement-meter {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .engagement-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FF69B4, #FFD700);
+            width: 85%;
+            border-radius: 4px;
+            animation: engagement-grow 3s infinite ease-in-out;
+        }
+
+        /* AVATAR 6: Crypto Expert */
+        .crypto-pinky {
+            position: relative;
+            width: 280px;
+            height: 350px;
+            margin: 0 auto;
+        }
+
+        .tech-outfit {
+            position: absolute;
+            top: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130px;
+            height: 170px;
+            background: linear-gradient(135deg, #1a1a1a, #2D3748);
+            border-radius: 20px 20px 0 0;
+            z-index: 5;
+        }
+
+        .crypto-logo {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #FF69B4, #FFD700);
+            border-radius: 50%;
+            z-index: 10;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .blockchain-chain {
+            position: absolute;
+            bottom: 20px;
+            left: 10px;
+            display: flex;
+            gap: 3px;
+        }
+
+        .chain-link {
+            width: 8px;
+            height: 8px;
+            background: #FFD700;
+            border-radius: 50%;
+            animation: chain-pulse 1.5s infinite ease-in-out;
+        }
+
+        .chain-link:nth-child(2) { animation-delay: 0.2s; }
+        .chain-link:nth-child(3) { animation-delay: 0.4s; }
+        .chain-link:nth-child(4) { animation-delay: 0.6s; }
+        .chain-link:nth-child(5) { animation-delay: 0.8s; }
+
+        .price-ticker {
+            position: absolute;
+            bottom: 35px;
+            right: 10px;
+            background: rgba(0, 255, 65, 0.2);
+            color: #00FF41;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 8px;
+            font-family: 'Courier New', monospace;
+            animation: price-update 2s infinite;
+        }
+
+        /* Éléments communs */
+        .common-head {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 110px;
+            background: linear-gradient(135deg, #FF69B4, #FFB6C1);
+            border-radius: 50% 50% 40% 40%;
+            z-index: 10;
+        }
+
+        .common-eyes {
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .eye {
+            width: 18px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .pupil {
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 10px;
+            background: #333;
+            border-radius: 50%;
+        }
+
+        .common-smile {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 15px;
+            border: 2px solid white;
+            border-top: none;
+            border-radius: 0 0 30px 30px;
+        }
+
+        /* Animations */
+        @keyframes shimmer {
+            0%, 100% { background-position: -200% 0; }
+            50% { background-position: 200% 0; }
+        }
+
+        @keyframes code-glow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes tiktok-colors {
+            0% { background: linear-gradient(135deg, #FF69B4, #FFD700); }
+            33% { background: linear-gradient(135deg, #00F2EA, #FF0050); }
+            66% { background: linear-gradient(135deg, #764BA2, #667EEA); }
+            100% { background: linear-gradient(135deg, #FF69B4, #FFD700); }
+        }
+
+        @keyframes ring-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); }
+        }
+
+        @keyframes chart-grow {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.3); }
+        }
+
+        @keyframes social-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @keyframes engagement-grow {
+            0% { width: 70%; }
+            50% { width: 95%; }
+            100% { width: 70%; }
+        }
+
+        @keyframes chain-pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes price-update {
+            0%, 90%, 100% { color: #00FF41; }
+            95% { color: #FFD700; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .pack-container {
+                grid-template-columns: 1fr;
+                padding: 20px 10px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 105, 180, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FF69B4, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🐙💕 Pinky Pack Visuel</h1>
+        <p>Collection d'avatars humanisés ultra-tendance pour dominer tous les écosystèmes</p>
+    </div>
+
+    <div class="pack-container">
+        <!-- CEO/Entrepreneuse -->
+        <div class="card">
+            <h3 class="card-title">👑 CEO Pinky</h3>
+            <div class="ceo-pinky">
+                <div class="common-head">
+                    <div class="common-eyes">
+                        <div class="eye"><div class="pupil"></div></div>
+                        <div class="eye"><div class="pupil"></div></div>
+                    </div>
+                    <div class="common-smile"></div>
+                </div>
+                <div class="ceo-glasses"></div>
+                <div class="business-suit">
+                    <div class="suit-collar"></div>
+                    <div class="tie"></div>
+                </div>
+                <div class="ceo-body"></div>
+                <div class="briefcase"></div>
+            </div>
+        </div>
+
+        <!-- Développeuse -->
+        <div class="card">
+            <h3 class="card-title">💻 Dev Pinky</h3>
+            <div class="dev-pinky">
+                <div class="common-head">
+                    <div class="common-eyes">
+                        <div class="eye"><div class="pupil"></div></div>
+                        <div class="eye"><div class="pupil"></div></div>
+                    </div>
+                    <div class="common-smile"></div>
+                </div>
+                <div class="hoodie">
+                    <div class="hoodie-pocket"></div>
+                    <div class="code-symbols">
+                        { code }<br/>
+                        &lt;smart/&gt;
+                    </div>
+                </div>
+                <div class="dev-body"></div>
+                <div class="laptop">
+                    <div class="screen-glow"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Influenceuse -->
+        <div class="card">
+            <h3 class="card-title">📱 Influencer Pinky</h3>
+            <div class="influencer-pinky">
+                <div class="common-head">
+                    <div class="common-eyes">
+                        <div class="eye"><div class="pupil"></div></div>
+                        <div class="eye"><div class="pupil"></div></div>
+                    </div>
+                    <div class="common-smile"></div>
+                </div>
+                <div class="trendy-outfit">
+                    <div class="crop-top"></div>
+                </div>
+                <div class="phone">
+                    <div class="phone-screen"></div>
+                </div>
+                <div class="ring-light"></div>
+                <div class="followers-count">1.2M followers</div>
+            </div>
+        </div>
+
+        <!-- Investisseuse VC -->
+        <div class="card">
+            <h3 class="card-title">💰 VC Pinky</h3>
+            <div class="vc-pinky">
+                <div class="common-head">
+                    <div class="common-eyes">
+                        <div class="eye"><div class="pupil"></div></div>
+                        <div class="eye"><div class="pupil"></div></div>
+                    </div>
+                    <div class="common-smile"></div>
+                </div>
+                <div class="power-suit">
+                    <div class="blazer-buttons">
+                        <div class="button"></div>
+                        <div class="button"></div>
+                    </div>
+                </div>
+                <div class="luxury-watch"></div>
+                <div class="money-stack"></div>
+                <div class="equity-chart">
+                    <div class="chart-bar"></div>
+                    <div class="chart-bar"></div>
+                    <div class="chart-bar"></div>
+                    <div class="chart-bar"></div>
+                    <div class="chart-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community Manager -->
+        <div class="card">
+            <h3 class="card-title">🤝 Community Pinky</h3>
+            <div class="community-pinky">
+                <div class="common-head">
+                    <div class="common-eyes">
+                        <div class="eye"><div class="pupil"></div></div>
+                        <div class="eye"><div class="pupil"></div></div>
+                    </div>
+                    <div class="common-smile"></div>
+                </div>
+                <div class="casual-outfit">
+                    <div class="social-icons">
+                        <div class="social-icon instagram"></div>
+                        <div class="social-icon twitter"></div>
+                        <div class="social-icon tiktok"></div>
+                        <div class="social-icon discord"></div>
+                    </div>
+                </div>
+                <div class="engagement-meter">
+                    <div class="engagement-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Crypto Expert -->
+        <div class="card">
+            <h3 class="card-title">₿ Crypto Pinky</h3>
+            <div class="crypto-pinky">
+                <div class="common-head">
+                    <div class="common-eyes">
+                        <div class="eye"><div class="pupil"></div></div>
+                        <div class="eye"><div class="pupil"></div></div>
+                    </div>
+                    <div class="common-smile"></div>
+                </div>
+                <div class="tech-outfit">
+                    <div class="crypto-logo">₿</div>
+                </div>
+                <div class="blockchain-chain">
+                    <div class="chain-link"></div>
+                    <div class="chain-link"></div>
+                    <div class="chain-link"></div>
+                    <div class="chain-link"></div>
+                    <div class="chain-link"></div>
+                </div>
+                <div class="price-ticker">$FUZZY +24%</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animation de parallaxe au scroll
+        window.addEventListener('scroll', () => {
+            const cards = document.querySelectorAll('.card');
+            const scrolled = window.pageYOffset;
+            
+            cards.forEach((card, index) => {
+                const rate = scrolled * -0.5;
+                card.style.transform = `translateY(${rate * (index * 0.1)}px)`;
+            });
+        });
+
+        // Animation d'apparition des cartes
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            card.style.transition = 'all 0.6s ease-out';
+            observer.observe(card);
+        });
+
+        // Interaction hover avancée
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Effet de particules au hover
+                createParticles(card);
+            });
+        });
+
+        function createParticles(element) {
+            for (let i = 0; i < 5; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = '4px';
+                particle.style.height = '4px';
+                particle.style.background = '#FFD700';
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '1000';
+                
+                const rect = element.getBoundingClientRect();
+                particle.style.left = (rect.left + Math.random() * rect.width) + 'px';
+                particle.style.top = (rect.top + Math.random() * rect.height) + 'px';
+                
+                document.body.appendChild(particle);
+                
+                // Animation des particules
+                particle.animate([
+                    { transform: 'translateY(0px)', opacity: 1 },
+                    { transform: 'translateY(-50px)', opacity: 0 }
+                ], {
+                    duration: 1000,
+                    easing: 'ease-out'
+                }).addEventListener('finish', () => {
+                    particle.remove();
+                });
+            }
+        }
+
+        // Easter egg: Konami code pour effet spécial
+        let konamiCode = [];
+        const konamiSequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.keyCode);
+            if (konamiCode.length > 10) konamiCode.shift();
+            
+            if (konamiCode.join(',') === konamiSequence.join(',')) {
+                activateEasterEgg();
+                konamiCode = [];
+            }
+        });
+
+        function activateEasterEgg() {
+            document.body.style.animation = 'rainbow 2s infinite';
+            
+            // Ajouter animation rainbow
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes rainbow {
+                    0% { filter: hue-rotate(0deg); }
+                    100% { filter: hue-rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            setTimeout(() => {
+                document.body.style.animation = '';
+                style.remove();
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
