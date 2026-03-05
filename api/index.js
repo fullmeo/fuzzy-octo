@@ -2,6 +2,7 @@
 // "Now with REAL octopus-level intelligence!"
 
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const OpenAI = require('openai');
@@ -27,7 +28,9 @@ const openai = new OpenAI({
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+// Serve React build: Docker puts it in public/, local build lands in build/
+const staticDir = path.join(__dirname, '..', process.env.NODE_ENV === 'production' ? 'public' : 'build');
+app.use(express.static(staticDir));
 
 // Sea-Quest game routes
 if (seaquestRouter) {
@@ -270,6 +273,14 @@ function generateFallbackSuggestions(query, language) {
     explanation: `${templates[index].split(':')[0].replace('//', '').trim()} approach (add OpenAI key for smart solutions)`
   }));
 }
+
+// SPA catch-all — must be last, after all API routes
+app.get('*', (req, res) => {
+  const index = path.join(staticDir, 'index.html');
+  res.sendFile(index, (err) => {
+    if (err) res.status(404).json({ error: 'Not found' });
+  });
+});
 
 // 🚀 Start the smart octopus
 app.listen(PORT, () => {
