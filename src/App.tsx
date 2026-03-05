@@ -811,6 +811,8 @@ function GamePage() {
   // 🎯 SYSTÈME DE GÉNÉRATION BASÉ SUR LES VIBES
   const [generatedApps, setGeneratedApps] = useState<any[]>([]);
   const [showAppGenerator, setShowAppGenerator] = useState(false);
+  const [gamingProofs, setGamingProofs] = useState<Array<{ id: number; status: string; score: number }>>([]);
+  const [totalProofScore, setTotalProofScore] = useState(0);
 
   // 🔗 NOUVEAU : VS Code Bridge Integration
   const [vscodeBridge, setVSCodeBridge] = useState<any>(null);
@@ -941,6 +943,83 @@ function GamePage() {
     return Math.min(diversityBonus + experienceBonus, 100);
   };
 
+  // ── App-generation helpers ────────────────────────────────────────────────
+
+  const generateAppName = (vibe: string): string => {
+    const names: Record<string, string[]> = {
+      chill:    ['ZenFlow', 'CalmCraft', 'MellowCode', 'SereneStack'],
+      flow:     ['StreamSync', 'FlowForge', 'RiverScript', 'CurrentCraft'],
+      creative: ['VibeBuild', 'ColorCode', 'DreamStack', 'InkForge'],
+      intense:  ['TurboStack', 'BlastForge', 'NitroCode', 'ApexBuild'],
+    };
+    const options = names[vibe] || names.flow;
+    return options[Math.floor(Math.random() * options.length)];
+  };
+
+  const mapVibeToCategory = (vibe: string): string => {
+    const categories: Record<string, string> = {
+      chill:    'Wellness & Productivity',
+      flow:     'Developer Tools',
+      creative: 'Creative & Design',
+      intense:  'Performance & Analytics',
+    };
+    return categories[vibe] || 'Developer Tools';
+  };
+
+  const generateDescription = (vibe: string, creativityLevel: number): string => {
+    const base: Record<string, string> = {
+      chill:    'A tranquil app that helps you stay focused without the noise.',
+      flow:     'A smooth developer tool built around uninterrupted workflow.',
+      creative: 'A creative sandbox for building visually expressive projects.',
+      intense:  'A high-performance solution optimised for speed and scale.',
+    };
+    const suffix = creativityLevel > 70 ? ' Powered by next-gen AI.' : '';
+    return (base[vibe] || base.flow) + suffix;
+  };
+
+  const generateFeatures = (vibeHistory: string[]): string[] => {
+    const featurePool: Record<string, string> = {
+      chill:    'Calm mode UI',
+      flow:     'Distraction-free editor',
+      creative: 'Visual theme builder',
+      intense:  'Real-time performance metrics',
+    };
+    const unique = Array.from(new Set(vibeHistory));
+    return unique.map(v => featurePool[v] || 'Smart suggestions').slice(0, 4);
+  };
+
+  const suggestTechStack = (vibe: string): string => {
+    const stacks: Record<string, string> = {
+      chill:    'React + Tailwind + SQLite',
+      flow:     'React + TypeScript + Node.js',
+      creative: 'React + Three.js + Canvas API',
+      intense:  'React + Rust (WASM) + Redis',
+    };
+    return stacks[vibe] || 'React + Node.js';
+  };
+
+  const generateCodePreview = (vibe: string): string => {
+    const previews: Record<string, string> = {
+      chill:    'const calm = () => breathe().then(code);',
+      flow:     'const flow = async (idea) => await build(idea);',
+      creative: 'const art = (vibe) => paint(vibe).with(colors);',
+      intense:  'const turbo = (fn) => optimize(fn, { speed: MAX });',
+    };
+    return previews[vibe] || 'const app = () => fuzzyOcto.generate();';
+  };
+
+  const calculateMarketPotential = (creativityLevel: number): string => {
+    if (creativityLevel >= 80) return '🚀 High';
+    if (creativityLevel >= 50) return '📈 Medium';
+    return '🌱 Emerging';
+  };
+
+  const calculateFuzzyInvestment = (creativityLevel: number): number => {
+    return Math.round(100 + creativityLevel * 9);
+  };
+
+  // ── End app-generation helpers ─────────────────────────────────────────────
+
   // 🔧 UNE SEULE VERSION de generateAppFromVibe :
   const generateAppFromVibe = (vibeHistory: string[]) => {
     const dominantVibe = getMostFrequentVibe(vibeHistory);
@@ -965,12 +1044,18 @@ function GamePage() {
   // Dans GamePage, ajoutons le système premium :
   // 🔥 NOUVEAU : Système Premium AI Mastery
   const [aiMasterySubscription, setAIMasterySubscription] = useState<'free' | 'premium' | 'pro'>('free');
-  const [premiumBenefits, setPremiumBenefits] = useState({
-    fuzzyMultiplier: 1, // Free = x1, Premium = x2, Pro = x3
-    exclusiveVibes: false,
-    vincianWisdom: false,
-    autoGenerateApps: false,
-    priorityHealing: false
+  const [premiumBenefits, setPremiumBenefits] = useState<{
+    fuzzyMultiplier: number;
+    maxAppsPerDay: number | string;
+    vibeActions: string[];
+    healingSpeed: string;
+    exclusiveFeatures: string[];
+  }>({
+    fuzzyMultiplier: 1,
+    maxAppsPerDay: 1,
+    vibeActions: ['basic'],
+    healingSpeed: 'normal',
+    exclusiveFeatures: []
   });
 
   // 🎮 Avantages selon le niveau d'abonnement
@@ -1022,7 +1107,7 @@ function GamePage() {
       window.addEventListener('message', (event) => {
         if (event.data.command === 'subscription-status') {
           setAIMasterySubscription(event.data.status);
-          setPremiumBenefits(subscriptionBenefits[event.data.status]);
+          setPremiumBenefits(subscriptionBenefits[event.data.status as keyof typeof subscriptionBenefits]);
         }
       });
     }

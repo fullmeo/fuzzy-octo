@@ -33,7 +33,7 @@ class FuzzyVSCodeConnector {
       
     } catch (error) {
       // Même les erreurs deviennent créatives !
-      this.transformErrorToFeature(error);
+      this.transformErrorToFeature(error instanceof Error ? error : new Error(String(error)));
     }
   }
   
@@ -69,16 +69,39 @@ class FuzzyVSCodeConnector {
       type: 'auto-debugging',
       fuzzyValue: this.calculateErrorCreativity(error)
     };
-    
+
     // Le bug devient une feature de l'extension !
     return creativeFeature;
   }
+
+  // ── Stub methods ──────────────────────────────────────────────────────────
+
+  testFuzzyLogic(): void { /* verify game logic is functional */ }
+
+  getGameState(): any {
+    return this.gameState || { currentVibe: 'flow', codeConfidence: 50, creativityScore: 50 };
+  }
+
+  adaptVibeToExtensionSettings(_gameVibe: any): any { return {}; }
+
+  extractWorkingPatterns(): any { return {}; }
+
+  applyWorkingPatternsToExtension(_patterns: any): void { /* apply */ }
+
+  calculateErrorCreativity(_error: Error): number { return 42; }
+
+  transferVibeToExtension(_action: any): void { /* transfer */ }
+
+  attemptExtensionHeal(): void { this.healExtension(); }
 }
 
 // 🎮 Intégration dans GamePage
 const initializeVSCodeBridge = () => {
   const bridge = new FuzzyVSCodeConnector();
-  
+
+  // Stub for standalone usage (actual implementation lives in the game component)
+  const doVibeAction = (_action: any): void => { /* handled by game component */ };
+
   // Chaque action FUZZY-SEA-QUEST informe VS Code
   const enhancedDoVibeAction = (action: any) => {
     // Action normale du jeu
@@ -93,3 +116,4 @@ const initializeVSCodeBridge = () => {
   
   return bridge;
 };
+export {};
