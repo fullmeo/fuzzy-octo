@@ -8,6 +8,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:api": "node api/tests/seaquest.test.js",
+    "test:convergence": "node api/tests/convergence.test.js",
+    "test:ai": "node api/tests/advancedai.test.js",
+    "test:all": "npm run test:api && npm run test:convergence && npm run test:ai",
     "server": "node api/index.js",
     "eject": "react-scripts eject"
   },
@@ -22,6 +25,7 @@
   "author": "Serigne Diagne <serignetrumpet@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
     "@types/react-router-dom": "^5.3.3",
