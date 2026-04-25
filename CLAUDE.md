@@ -205,7 +205,7 @@ The `overrides` field patches transitive dependency vulnerabilities. **Do not re
 
 **Do not add** `ajv` or `minimatch` overrides — they break `fork-ts-checker-webpack-plugin` (AJV 6 vs 8 API mismatch) and `minimatch` v3 callers respectively.
 
-Current overrides: `nth-check`, `postcss`, `webpack-dev-server`, `js-yaml`, `svgo`, `node-forge`, `jsonpath`, `bfj`, `lodash`, `qs`, `react-router`, `webpack`, `serialize-javascript`.
+Current overrides: `nth-check`, `postcss` (>=8.5.10), `webpack-dev-server`, `js-yaml`, `svgo`, `node-forge`, `jsonpath`, `bfj`, `lodash` (>=4.18.0), `qs`, `react-router`, `webpack`, `serialize-javascript` (>=7.0.5), `picomatch` (>=3.0.2), `flatted` (>=3.4.2), `path-to-regexp` (>=0.1.13).
 
 ---
 
