@@ -1,0 +1,39 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Europe/Paris"
+    open-pull-requests-limit: 8
+    # Security updates prioritaires + version updates raisonnables
+    security-updates-only: false
+
+    # Regroupements pour réduire le bruit
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+          - "minor"
+      development-dependencies:
+        dependency-type: "development"
+      babel-ecosystem:
+        patterns:
+          - "@babel/*"
+          - "babel-*"
+
+    # Labels et assignees clairs
+    labels:
+      - "dependencies"
+      - "security"
+    assignees:
+      - "fullmeo"
+    reviewers:
+      - "fullmeo"
+
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+      include: "scope"
