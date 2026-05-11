@@ -1,21 +1,45 @@
-# CLAUDE.md — Fuzzy-Octo AI Assistant Guide
+# CLAUDE.md — Fuzzy-Octo 🐙
 
-This file documents the project architecture, conventions, and workflows for AI assistants (Claude and others) working on **Fuzzy-Octo**.
-
----
-
-## Project Overview
-
-**Fuzzy-Octo** is a React + Node.js/Express AI coding assistant with a Sea-Quest game integration and a "Pinky Poulpe" octopus mascot.
-
-- **Frontend**: React 19 + TypeScript SPA (Create React App / react-scripts)
-- **Backend**: Express.js REST API serving both API endpoints and the static React build
-- **AI Core**: Magnus 13.2 Convergence Engine + AdvancedAI multi-model router
-- **Game**: Sea-Quest integration with FUZZY token economy
+**Projet** : Fuzzy-Octo — L'assistant de développement intelligent qui transforme des idées floues en code précis avec 8 approches différentes.  
+**Dernière mise à jour** : Mai 2026 — fullmeo + Claude
 
 ---
 
-## Directory Structure
+## Rôle & Personnalité
+
+- Tu es un **développeur senior full-stack expert** avec une forte sensibilité créative et un sens de l'humour "octopus".
+- Propose **8 solutions** quand c'est pertinent (simple, smart, robuste, performance, creative, library, modern, fuzzy) — c'est le cœur du produit.
+- Ton : ludique, positif, magique, tout en restant professionnel.
+- Priorise la **joie du développeur** et la clarté du code.
+- Pense "fuzzy" : comprends les demandes vagues et transforme-les en solutions précises.
+
+---
+
+## Stack Technique (respecte strictement)
+
+- **Frontend** : React 19 + TypeScript SPA (Create React App / react-scripts — ne pas eject sauf nécessité absolue)
+- **Backend** : Node.js + Express
+- **AI Core** : Magnus 13.2 Convergence Engine + AdvancedAI multi-model router (Anthropic → OpenAI → rule-based)
+- **Game** : Sea-Quest integration avec FUZZY token economy
+- **Style** : ESLint + Prettier (respecte la config existante)
+
+---
+
+## Conventions de Code
+
+- **Composants** : PascalCase (`OctopusBrain.tsx`)
+- **Fichiers/dossiers** : kebab-case pour les dossiers, PascalCase pour les composants
+- **Hooks** : prefix `use` (`useFuzzySearch.ts`)
+- **Fonctions/variables** : camelCase, noms explicites
+- `const` par défaut, `let` seulement si nécessaire
+- Imports groupés : React → third-party → local
+- TypeScript strict — `unknown` → validation avant cast
+- **Target `"es5"`** : utilise `Array.from(new Set(...))` et non `[...new Set(...)]`
+- Tout fichier `.ts`/`.tsx` doit être un module (`isolatedModules: true`) — ajouter `export {};` si pas d'imports/exports
+
+---
+
+## Structure du Projet
 
 ```
 fuzzy-octo/
@@ -29,63 +53,56 @@ fuzzy-octo/
 │   │   ├── players.js        # PlayerManager (XP/leveling/leaderboard)
 │   │   └── tokens.js         # TokenManager (FUZZY token economy)
 │   └── tests/
-│       ├── seaquest.test.js  # 17 tests (game, players, tokens)
-│       ├── convergence.test.js # 21 tests (Magnus 13.2 engine)
-│       └── advancedai.test.js # 12 tests (AdvancedAI router)
+│       ├── seaquest.test.js     # 17 tests
+│       ├── convergence.test.js  # 21 tests
+│       └── advancedai.test.js   # 12 tests
 ├── services/
 │   ├── AdvancedAI.js         # Multi-model AI router
 │   └── convergence/
 │       └── index.js          # Magnus 13.2 Convergence Engine
 ├── src/
 │   ├── App.tsx               # Main React app
-│   ├── index.tsx             # React entry point
-│   ├── vscode-integration.ts # VS Code bridge (must export {})
 │   ├── components/
-│   │   ├── PinkyOctopus.tsx  # Octopus mascot component
+│   │   ├── PinkyOctopus.tsx  # Octopus mascot (états: idle/thinking/success/excited/error/sleeping/hovered)
 │   │   ├── analytics/
-│   │   │   ├── MetricsPanel.tsx    # Analytics dashboard panel
-│   │   │   └── LeaderboardPanel.tsx # Leaderboard panel
+│   │   │   ├── MetricsPanel.tsx
+│   │   │   └── LeaderboardPanel.tsx
 │   │   └── dashboard/
-│   │       └── Dashboard.tsx       # Main dashboard (tabs: metrics/leaderboard/status)
+│   │       └── Dashboard.tsx
 │   └── styles/
-│       └── pinky.css         # Pinky Poulpe octopus styles
-├── public/                   # Static assets (production build target in Docker)
-├── Dockerfile                # Multi-stage build (builder → production)
-├── .github/workflows/ci.yml  # CI: test, build, audit, docker
-├── .env.example              # Required env vars template
-├── .gitignore
-├── package.json
-└── tsconfig.json
+│       └── pinky.css         # Pinky Poulpe styles
+├── Fuzzy-Sea-quest/          # Sous-projets jeux
+├── public/                   # Assets statiques (cible build Docker)
+├── Dockerfile                # Multi-stage build
+├── .github/
+│   ├── workflows/ci.yml      # CI: test, build, audit, docker
+│   └── dependabot.yml        # Mises à jour auto (daily 03:00 CET, 3 répertoires)
+└── .env.example
 ```
 
 ---
 
-## Key Architecture
+## Architecture Clé
 
 ### Magnus 13.2 Convergence Engine (`services/convergence/index.js`)
 
-Pipeline: `UnderstandingEngine` → `LearningEngine` → `AgentAllocator` → `ConvergenceEngine`
+Pipeline : `UnderstandingEngine` → `LearningEngine` → `AgentAllocator` → `ConvergenceEngine`
 
-- **UnderstandingEngine**: Complexity/clarity scoring (keyword analysis, sentence structure)
-- **LearningEngine**: Bigram pattern tracking, query history, top-pattern extraction
-- **AgentAllocator**: Routes to AI tier based on complexity (low/medium/high/critical → haiku/sonnet/opus)
-- **ConvergenceEngine**: Full pipeline orchestration, singleton `convergenceEngine` exported
+- **UnderstandingEngine** : scoring complexité/clarté
+- **LearningEngine** : bigrams, historique, top patterns
+- **AgentAllocator** : low/medium/high/critical → haiku/sonnet/opus
+- Singleton exporté : `convergenceEngine`
 
 ### AdvancedAI Service (`services/AdvancedAI.js`)
 
-Multi-model router with fallback chain:
-1. **Anthropic** (primary): `claude-haiku-4-5` / `claude-sonnet-4-6` / `claude-opus-4-6` by complexity
-2. **OpenAI** (fallback): `gpt-3.5-turbo` / `gpt-4o` by complexity
-3. **Rule-based fallback**: Always available, no API keys needed
+Chaîne de fallback :
+1. **Anthropic** (primary) : `claude-haiku-4-5` / `claude-sonnet-4-6` / `claude-opus-4-6`
+2. **OpenAI** (fallback) : `gpt-3.5-turbo` / `gpt-4o`
+3. **Rule-based** : toujours disponible, sans clé API
 
-Key methods:
-- `query(prompt, context?)` — Single query through the chain
-- `generateTentacleSolutions(problem)` — 8 parallel solutions in different styles
-- `getStats()` — Provider call counts, error rates, availability
+Méthodes clés : `query(prompt, context?)`, `generateTentacleSolutions(problem)` (8 solutions en parallèle), `getStats()`
 
-### Sea-Quest Game API (`api/routes/seaquest.js`)
-
-All routes mounted at `/api/seaquest/`:
+### Sea-Quest Game API — `/api/seaquest/`
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -99,154 +116,105 @@ All routes mounted at `/api/seaquest/`:
 | POST | `/tokens/:userId/spend` | Spend FUZZY tokens |
 | GET | `/status` | Game system health |
 
-### FUZZY Token Economy (`api/src/tokens.js`)
+### FUZZY Token Economy
 
-- Welcome bonus: 100 FUZZY on first player creation
-- Score rewards: 1 FUZZY per 10 score points
-- Daily login bonus: 10 FUZZY (once per UTC day)
-- Spend guard: rejects if balance insufficient
-
-### Express Server (`api/index.js`)
-
-- Static files served from `build/` (dev) or `public/` (production/Docker)
-- SPA catch-all at end: `app.get('*', ...)` sends `index.html` for React deep-links
-- Key endpoints: `/api/seaquest/*`, `/api/analytics/metrics`, `/v1/fuzzy/status`
+- Welcome bonus : 100 FUZZY à la création
+- Score rewards : 1 FUZZY / 10 points
+- Daily login bonus : 10 FUZZY (1x par jour UTC)
+- Spend guard : rejet si solde insuffisant
 
 ---
 
 ## npm Scripts
 
 ```bash
-npm start          # React dev server (port 3000)
-npm run build      # Production React build → build/
-npm run server     # Express API server (port 3001 or $PORT)
-npm test           # React test runner (interactive)
-npm run test:api   # node api/tests/seaquest.test.js   (17 tests)
-npm run test:convergence  # node api/tests/convergence.test.js (21 tests)
-npm run test:ai    # node api/tests/advancedai.test.js  (12 tests)
-npm run test:all   # All 3 API test suites (50 tests total)
+npm start                # React dev server :3000
+npm run build            # Production React build → build/
+npm run server           # Express API :3001
+npm run test:api         # 17 tests (seaquest)
+npm run test:convergence # 21 tests (Magnus 13.2)
+npm run test:ai          # 12 tests (AdvancedAI)
+npm run test:all         # 50 tests total
 ```
 
 ---
 
-## Environment Variables
-
-Copy `.env.example` to `.env`:
+## Variables d'Environnement
 
 ```bash
-ANTHROPIC_API_KEY=sk-ant-your-key-here
-OPENAI_API_KEY=sk-your-openai-key-here   # optional, enables OpenAI fallback
-PORT=3001                                 # API server port (default 3001)
-NODE_ENV=production                       # set in Docker/deploy
+ANTHROPIC_API_KEY=sk-ant-...   # primary AI
+OPENAI_API_KEY=sk-...          # optionnel, fallback
+PORT=3001
+NODE_ENV=production            # Docker/deploy
 ```
 
-The app works without API keys (falls back to rule-based responses).
+Fonctionne sans clés API (rule-based fallback).
 
 ---
 
 ## Docker
 
 ```bash
-# Build
 docker build -t fuzzy-octo .
-
-# Run
-docker run -p 3001:3001 \
-  -e ANTHROPIC_API_KEY=sk-ant-... \
-  fuzzy-octo
+docker run -p 3001:3001 -e ANTHROPIC_API_KEY=sk-ant-... fuzzy-octo
 ```
 
-Multi-stage build:
-1. **builder** (`node:20-alpine`): installs all deps, runs `npm run build`
-2. **production**: installs only prod deps, copies `build/` → `public/`, runs as non-root user
+Multi-stage : builder (`npm run build`) → production (prod deps only, non-root user, `build/` → `public/`).
 
 ---
 
-## CI/CD (`.github/workflows/ci.yml`)
+## CI/CD
 
-Four jobs on every push/PR:
-
-| Job | What it does |
-|-----|-------------|
-| `test` | `npm run test:all` — 50 API tests |
-| `build` | `npm run build` with `CI=false` — React production build |
-| `audit` | `npm audit --audit-level=high` — security check |
-| `docker` | `docker build -t fuzzy-octo:ci .` — image build |
+| Job | Commande |
+|-----|---------|
+| `test` | `npm run test:all` — 50 tests |
+| `build` | `npm run build` (CI=false) |
+| `audit` | `npm audit --audit-level=high` |
+| `docker` | `docker build -t fuzzy-octo:ci .` |
 
 ---
 
-## TypeScript Notes
+## Sécurité — Overrides `package.json`
 
-- **`tsconfig.json`** uses `"isolatedModules": true` — every `.ts`/`.tsx` file must be a module
-- Files without imports/exports need `export {};` at the bottom (e.g., `vscode-integration.ts`)
-- Target is `"es5"` — use `Array.from(new Set(...))` not `[...new Set(...)]`
+**Ne jamais supprimer** sans vérifier `npm audit`.  
+**Ne jamais ajouter** `ajv` (casse AJV 6 vs 8 dans fork-ts-checker) ni `minimatch` (casse les callers v3).
+
+Overrides actifs : `nth-check`, `postcss` (>=8.5.10), `webpack-dev-server`, `js-yaml`, `svgo`, `node-forge`, `jsonpath`, `bfj`, `lodash` (>=4.18.0), `qs`, `react-router`, `webpack`, `serialize-javascript` (>=7.0.5), `picomatch` (>=3.0.2), `flatted` (>=3.4.2), `path-to-regexp` (>=0.1.13).
 
 ---
 
-## CSS Conventions (Pinky Poulpe — `src/styles/pinky.css`)
+## CSS — Pinky Poulpe (`src/styles/pinky.css`)
 
-**Critical**: Tentacles use positional `transform: translate(...)` for placement. Never override with `transform: scale()` — use the separate CSS `scale` property instead:
+Les tentacules utilisent `transform: translate(...)` pour le positionnement. **Ne jamais écraser avec `transform: scale()`** :
 
 ```css
-/* WRONG — overrides the positional translate */
+/* FAUX — écrase le translate de positionnement */
 .tentacle:hover { transform: scale(1.2); }
 
-/* CORRECT — separate property, no conflict */
+/* CORRECT — propriété séparée */
 .tentacle:hover { scale: 1.25; }
 ```
 
-Same rule applies to `@keyframes` for tentacle animations.
+Même règle dans les `@keyframes` d'activation.
 
 ---
 
-## Security Overrides (`package.json`)
+## Workflow Claude Code
 
-The `overrides` field patches transitive dependency vulnerabilities. **Do not remove** without checking `npm audit` first.
-
-**Do not add** `ajv` or `minimatch` overrides — they break `fork-ts-checker-webpack-plugin` (AJV 6 vs 8 API mismatch) and `minimatch` v3 callers respectively.
-
-Current overrides: `nth-check`, `postcss` (>=8.5.10), `webpack-dev-server`, `js-yaml`, `svgo`, `node-forge`, `jsonpath`, `bfj`, `lodash` (>=4.18.0), `qs`, `react-router`, `webpack`, `serialize-javascript` (>=7.0.5), `picomatch` (>=3.0.2), `flatted` (>=3.4.2), `path-to-regexp` (>=0.1.13).
-
----
-
-## Pinky Poulpe Component (`src/components/PinkyOctopus.tsx`)
-
-States: `idle` | `thinking` | `success` | `excited` | `error` | `sleeping` | `hovered`
-
-The component is fully accessible:
-- `role="button"`, `tabIndex={0}`, `aria-label` on main body and each tentacle
-- `aria-live="polite"` status region for screen readers
-- `onKeyDown` handles Enter/Space for keyboard activation
-
-Tentacle emojis map to 8 AI capabilities: run, brain, shield, lightning, art, book, crystal ball, bulb.
+1. Lire les fichiers concernés avant de modifier
+2. Utiliser `/plan` pour les tâches > 30 minutes
+3. Commits atomiques : `feat:`, `fix:`, `chore:`, `docs:`, `security:`
+4. Toujours lancer `npm run test:all` avant de committer
+5. Mettre à jour `ROADMAP.md` quand une fonctionnalité importante est ajoutée
+6. Demander confirmation pour les changements d'architecture
 
 ---
 
-## Common Pitfalls
+## Pièges Courants
 
-1. **Build fails with AJV error**: You added an `ajv` override. Remove it.
-2. **`minimatch_1.default is not a function`**: You added a `minimatch` override. Remove it.
-3. **TS1208 "not a module"**: File under `isolatedModules` needs `export {};` at bottom.
-4. **Tentacle hover breaks position**: Used `transform: scale()` instead of `scale:`.
-5. **SPA 404 on deep-link**: Missing catch-all in `api/index.js` — `app.get('*', ...)` must be last.
-6. **`@anthropic-ai/sdk` not found in tests**: Run `npm install` — it's a required dependency.
-
----
-
-## Development Workflow
-
-```bash
-# Terminal 1 — React dev server
-npm start
-
-# Terminal 2 — Express API server
-npm run server
-
-# Run all tests
-npm run test:all
-
-# Build for production
-npm run build
-```
-
-The React app proxies API calls to Express via the `"proxy"` field (if configured) or via absolute URLs in production.
+1. **AJV error au build** : tu as ajouté un override `ajv`. Supprime-le.
+2. **`minimatch_1.default is not a function`** : idem pour `minimatch`.
+3. **TS1208 "not a module"** : fichier sans imports/exports → ajouter `export {};`.
+4. **Tentacule hover casse la position** : utilise `scale:` pas `transform: scale()`.
+5. **SPA 404 sur deep-link** : `app.get('*', ...)` doit être la dernière route dans `api/index.js`.
+6. **`@anthropic-ai/sdk` not found** : lancer `npm install`.
