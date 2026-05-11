@@ -37,3 +37,67 @@ updates:
       prefix: "chore(deps)"
       prefix-development: "chore(deps-dev)"
       include: "scope"
+
+  - package-ecosystem: "npm"
+    directory: "/Fuzzy-Sea-quest/fuzzy-sea-quest-game"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Europe/Paris"
+    open-pull-requests-limit: 8
+    security-updates-only: false
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+          - "minor"
+      development-dependencies:
+        dependency-type: "development"
+      babel-ecosystem:
+        patterns:
+          - "@babel/*"
+          - "babel-*"
+    labels:
+      - "dependencies"
+      - "security"
+    assignees:
+      - "fullmeo"
+    reviewers:
+      - "fullmeo"
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+      include: "scope"
+
+  - package-ecosystem: "npm"
+    directory: "/Fuzzy-Sea-quest/fuzzy-sea-quest"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "Europe/Paris"
+    open-pull-requests-limit: 8
+    security-updates-only: false
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+          - "minor"
+      development-dependencies:
+        dependency-type: "development"
+      babel-ecosystem:
+        patterns:
+          - "@babel/*"
+          - "babel-*"
+    labels:
+      - "dependencies"
+      - "security"
+    assignees:
+      - "fullmeo"
+    reviewers:
+      - "fullmeo"
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+      include: "scope"
