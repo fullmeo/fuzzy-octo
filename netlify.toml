@@ -1,0 +1,46 @@
+[build]
+  command   = "npm run build"
+  publish   = "build"
+  functions = "netlify/functions"
+
+[build.environment]
+  CI        = "false"
+  NODE_VERSION = "22"
+
+# API routes → Netlify Function
+[[redirects]]
+  from   = "/api/*"
+  to     = "/.netlify/functions/api"
+  status = 200
+  force  = true
+
+# Legacy endpoints
+[[redirects]]
+  from   = "/fuzzy"
+  to     = "/.netlify/functions/api"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from   = "/health"
+  to     = "/.netlify/functions/api"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from   = "/brain"
+  to     = "/.netlify/functions/api"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from   = "/v1/*"
+  to     = "/.netlify/functions/api"
+  status = 200
+  force  = true
+
+# SPA catch-all — React Router
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
