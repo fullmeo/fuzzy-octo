@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "type": "stdio",
+      "scope": "project"
+    },
+    "github": {
+      "type": "oauth",
+      "scope": "project"
+    }
+  }
+}
