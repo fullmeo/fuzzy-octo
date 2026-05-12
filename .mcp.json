@@ -6,6 +6,25 @@
     },
     "github": {
       "type": "oauth",
+      "scope": "project",
+      "permissions": {
+        "contents": "write",
+        "pull_requests": "write",
+        "issues": "write",
+        "actions": "read",
+        "metadata": "read"
+      }
+    },
+    "brave-search": {
+      "type": "stdio",
+      "scope": "project"
+    },
+    "npm": {
+      "type": "stdio",
+      "scope": "project"
+    },
+    "terminal": {
+      "type": "stdio",
       "scope": "project"
     }
   }
